@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FitFlow – Fashion Fit & Style Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      /* Fonts */
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Inter", sans-serif;
+
+      /* Base palette (overridden by theme switcher) */
+      --bg: #f5f5f7;
+      --bg-alt: #ffffff;
+      --card: #ffffff;
+      --charcoal: #171717;
+      --muted: #6b6b6b;
+
+      /* Accent palette (editable by theme panel) */
+      --accent: #ff3f6c;
+      --accent-strong: #ff1659;
+      --accent-soft: #ffe3f0;
+
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.16);
+      --shadow-subtle: 0 8px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg);
+      color: var(--charcoal);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 20px 64px;
+    }
+
+    /* ===== NAV – Myntra style ===== */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 0 10px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-pill {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #ff3f6c, #ff9a3f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand-name {
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      white-space: nowrap;
+    }
+
+    .nav-link {
+      padding-bottom: 2px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .nav-search {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f5f5f6;
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .nav-search span {
+      font-size: 14px;
+      opacity: 0.6;
+    }
+
+    .nav-search input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 12px;
+      width: 100%;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-icon-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .nav-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      font-size: 10px;
+    }
+
+    .nav-icon-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #f5f5f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .nav-icon-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: #f5f5f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .nav-pages-select {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .nav-pages-select select {
+      border-radius: 999px;
+      padding: 4px 18px 4px 8px;
+      border: 1px solid rgba(0, 0, 0, 0.14);
+      background: #ffffff;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      appearance: none;
+    }
+
+    /* PAGES: only one visible at a time */
+    .app-page {
+      display: none;
+    }
+    .app-page.active {
+      display: block;
+    }
+
+    /* ===== HOME – Myntra style ===== */
+    .home {
+      margin-top: 18px;
+    }
+
+    .home-hero {
+      background: linear-gradient(90deg, #ffe9ef, #ffe6cf);
+      border-radius: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 24px;
+      padding: 24px 26px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+    }
+
+    .home-hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .home-eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #b45309;
+    }
+
+    .home-heading {
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+    }
+
+    .home-heading span {
+      color: var(--accent-strong);
+    }
+
+    .home-subcopy {
+      font-size: 13px;
+      color: #4b5563;
+      max-width: 360px;
+    }
+
+    .home-hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 4px 0 4px;
+    }
+
+    .home-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .home-hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      padding: 8px 18px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 7px 14px;
+      border: 1px solid rgba(0, 0, 0, 0.16);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      background: #ffffff;
+      cursor: pointer;
+      color: #111827;
+    }
+
+    .home-hero-note {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .home-hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .home-hero-card {
+      width: 260px;
+      height: 280px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #111;
+      position: relative;
+      transform: rotate(4deg);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .home-hero-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .home-hero-badge {
+      position: absolute;
+      left: -8px;
+      top: 14px;
+      background: #111827;
+      color: #f9fafb;
+      font-size: 10px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .home-hero-price-tag {
+      position: absolute;
+      right: 10px;
+      bottom: 14px;
+      background: #ffffff;
+      color: #111827;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.35);
+    }
+
+    /* Category strip */
+    .home-category-strip {
+      margin-top: 26px;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    .home-category-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #6b7280;
+      flex: 0 0 auto;
+    }
+
+    .home-category-chip {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 7px 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      background: #f5f5f6;
+      cursor: pointer;
+    }
+
+    .home-category-chip.active {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    /* Product teaser row */
+    .home-row {
+      margin-top: 26px;
+    }
+
+    .home-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    .home-row-title {
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .home-row-link {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #6b7280;
+      cursor: pointer;
+    }
+
+    .product-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px;
+    }
+
+    .product-card {
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-body {
+      padding: 6px 8px 8px;
+    }
+
+    .product-brand {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .product-desc {
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .product-price {
+      font-weight: 600;
+    }
+
+    .product-price span {
+      font-size: 10px;
+      color: #6b7280;
+      margin-left: 4px;
+      text-decoration: line-through;
+    }
+
+    /* ===== GENERIC SECTIONS (for other pages) ===== */
+    .section {
+      margin-top: 32px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .section-desc {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 420px;
+    }
+
+    /* LOGIN SECTION */
+    .login-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 24px;
+      align-items: center;
+    }
+
+    .login-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: var(--radius-xl);
+      padding: 20px 20px 18px;
+      box-shadow: var(--shadow-subtle);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .login-title {
+      font-size: 18px;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .login-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .role-toggle {
+      display: inline-flex;
+      padding: 4px;
+      border-radius: 999px;
+      background: #f5f5f6;
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+
+    .role-pill {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 11px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .role-pill.active {
+      background: #ffffff;
+      color: var(--charcoal);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .form-input {
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: #f9fafb;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(255, 63, 108, 0.18);
+    }
+
+    .login-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .login-meta-row a {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      width: 100%;
+      margin-top: 2px;
+      border-radius: 999px;
+      padding: 9px 14px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #fffdf8;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .login-role-notice {
+      margin-top: 10px;
+      font-size: 11px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: #fef2f2;
+    }
+
+    .login-role-notice strong {
+      font-weight: 700;
+    }
+
+    .role-extra-copy {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .login-side {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .login-side-list {
+      margin-top: 8px;
+      font-size: 12px;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .login-side-list li {
+      margin-bottom: 6px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .login-side-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      margin-top: 3px;
+    }
+
+    /* AFTER LOGIN FLOW SECTION */
+    .flow-section {
+      margin-top: 20px;
+    }
+
+    .flow-header {
+      margin-bottom: 16px;
+    }
+
+    .flow-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 520px;
+    }
+
+    .flow-role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .flow-steps {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .flow-step-card {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-xl);
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow-subtle);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      min-height: 160px;
+    }
+
+    .flow-step-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .flow-step-title {
+      font-size: 16px;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .flow-step-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .flow-progress {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .flow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .flow-dot.active {
+      width: 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    }
+
+    .flow-side-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 12px;
+      border: 1px dashed rgba(0, 0, 0, 0.08);
+      font-size: 12px;
+    }
+
+    .flow-side-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .flow-side-list {
+      margin-top: 6px;
+      padding-left: 16px;
+      font-size: 12px;
+    }
+
+    .flow-nav {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .flow-nav button {
+      flex: 1;
+      min-width: 110px;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    .flow-nav button.primary {
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #fffdf8;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .flow-nav button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    /* SCREENS GRID */
+    .screens-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .screen-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-xl);
+      padding: 18px;
+      box-shadow: var(--shadow-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        border-color 0.12s ease, background 0.12s ease;
+    }
+
+    .screen-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.18);
+    }
+
+    .screen-card.active {
+      border-color: rgba(0, 0, 0, 0.14);
+      background: linear-gradient(135deg, #fdf2ff, #ffffff);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.22);
+    }
+
+    .screen-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .screen-name {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .screen-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .mini-phone {
+      margin-top: 6px;
+      border-radius: 22px;
+      padding: 10px;
+      background: var(--bg-alt);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .mini-phone-inner {
+      border-radius: 16px;
+      background: var(--card);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mini-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .mini-pill {
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 9px;
+      background: var(--accent-soft);
+    }
+
+    .mini-tag {
+      border-radius: 999px;
+      padding: 3px 7px;
+      font-size: 9px;
+      background: #f3e8ff;
+    }
+
+    /* SCREEN TITLES STRIP + STATEMENT */
+    .screen-titles-wrapper {
+      margin-bottom: 20px;
+    }
+
+    .screen-titles-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .screen-titles {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .screen-titles::-webkit-scrollbar {
+      height: 4px;
+    }
+    .screen-titles::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.5);
+      border-radius: 999px;
+    }
+
+    .screen-title {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 6px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: rgba(255, 251, 245, 0.9);
+      font-size: 11px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.12s ease, border-color 0.12s ease,
+        box-shadow 0.12s ease, transform 0.12s ease;
+    }
+
+    .screen-title span {
+      opacity: 0.7;
+      margin-right: 6px;
+      font-size: 10px;
+    }
+
+    .screen-title.active {
+      background: linear-gradient(135deg, #ffe3f0, #ffffff);
+      border-color: rgba(0, 0, 0, 0.16);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .screen-title-statement {
+      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 18px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .screen-title-statement h3 {
+      font-size: 14px;
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .screen-title-statement p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 10px;
+    }
+
+    /* STYLE PANEL (Color + Font palette) */
+    .style-panel {
+      position: fixed;
+      right: 16px;
+      top: 120px;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 12px;
+      width: 180px;
+      z-index: 9999;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
+      font-size: 11px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .style-panel h4 {
+      font-size: 10px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .palette button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .font-palette button {
+      width: 100%;
+      margin-bottom: 6px;
+      border-radius: 999px;
+      padding: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      background: #fff;
+      cursor: pointer;
+      font-size: 11px;
+      text-align: left;
+    }
+
+    .font-palette button:hover {
+      border-color: var(--accent);
+    }
+
+    .style-panel small {
+      display: block;
+      margin-top: 4px;
+      font-size: 9px;
+      color: var(--muted);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 980px) {
+      .nav-center {
+        display: none;
+      }
+      .home-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .home-hero-right {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .login-grid,
+      .flow-steps {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .style-panel {
+        top: auto;
+        bottom: 16px;
+        right: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page {
+        padding-inline: 12px;
+      }
+      .screen-card {
+        padding: 14px;
+      }
+      .style-panel {
+        width: 160px;
+      }
+      .home-hero {
+        padding: 18px 16px;
+      }
+      .home-heading {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <!-- NAV – Myntra-like -->
+    <header class="nav">
+      <div class="nav-left">
+        <div class="logo-pill">F</div>
+        <div class="brand-name">FitFlow</div>
+      </div>
+
+      <div class="nav-center">
+        <nav class="nav-links">
+          <div class="nav-link active">Women</div>
+          <div class="nav-link">Men</div>
+          <div class="nav-link">Kids</div>
+          <div class="nav-link">Boutiques</div>
+          <div class="nav-link">Resale</div>
+        </nav>
+        <div class="nav-search">
+          <span>🔍</span>
+          <input placeholder="Search for products, brands & more" />
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <div class="nav-icon-group">
+          <div class="nav-icon" id="loginCtaBtn">
+            <div class="nav-icon-avatar">👤</div>
+            <span>Profile</span>
+          </div>
+          <div class="nav-icon">
+            <div class="nav-icon-badge">♡</div>
+            <span>Wishlist</span>
+          </div>
+          <div class="nav-icon">
+            <div class="nav-icon-badge">🛍</div>
+            <span>Bag</span>
+          </div>
+        </div>
+        <div class="nav-pages-select">
+          <span>Pages</span>
+          <select id="pageSelect">
+            <option value="home">Home</option>
+            <option value="login">Login</option>
+            <option value="after">After Login</option>
+            <option value="screens">Screens</option>
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <!-- HOME PAGE – Myntra-style listing -->
+    <section id="home" class="home app-page active">
+      <!-- Hero banner -->
+      <div class="home-hero">
+        <div class="home-hero-left">
+          <div class="home-eyebrow">End of season drop</div>
+          <h1 class="home-heading">
+            Cozy <span>Winter Fits</span><br />with perfect sizing.
+          </h1>
+          <p class="home-subcopy">
+            Smart sizing like FitFlow, shopping flow like Myntra. Discover outfits that match your body, your vibe, and your local boutiques.
+          </p>
+          <div class="home-hero-tags">
+            <div class="home-tag">Best fit picks</div>
+            <div class="home-tag">Local boutiques</div>
+            <div class="home-tag">Resale ready</div>
+          </div>
+          <div class="home-hero-cta-row">
+            <button class="btn-primary" id="goToLoginFromHero">Login / Signup</button>
+            <button class="btn-ghost" id="goToScreensBtn">View app flows</button>
+          </div>
+          <div class="home-hero-note">
+            curated like myntra · powered by fitflow
+          </div>
+        </div>
+
+        <div class="home-hero-right">
+          <div class="home-hero-card">
+            <div class="home-hero-badge">New drop</div>
+            <img src="https://images.pexels.com/photos/3760852/pexels-photo-3760852.jpeg?auto=compress&cs=tinysrgb&w=800"
+                 alt="Model wearing cozy sweater" />
+            <div class="home-hero-price-tag">
+              ₹1,799 · Fit score 94%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category strip -->
+      <div class="home-category-strip">
+        <div class="home-category-label">Shop by</div>
+        <button class="home-category-chip active">Women</button>
+        <button class="home-category-chip">Men</button>
+        <button class="home-category-chip">Kids</button>
+        <button class="home-category-chip">Ethnic</button>
+        <button class="home-category-chip">Streetwear</button>
+        <button class="home-category-chip">Plus size</button>
+        <button class="home-category-chip">Resale</button>
+      </div>
+
+      <!-- Product teaser row -->
+      <section class="home-row">
+        <div class="home-row-header">
+          <h2 class="home-row-title">Trending now</h2>
+          <div class="home-row-link">View all →</div>
+        </div>
+        <div class="product-strip">
+          <article class="product-card">
+            <img class="product-img" src="https://images.pexels.com/photos/7671166/pexels-photo-7671166.jpeg?auto=compress&cs=tinysrgb&w=800"
+                 alt="Oversized sweater" />
+            <div class="product-body">
+              <div class="product-brand">Fleuri</div>
+              <div class="product-desc">Oversized knitted sweater</div>
+              <div class="product-price">₹1,499 <span>₹2,199</span></div>
+            </div>
+          </article>
+          <article class="product-card">
+            <img class="product-img" src="https://images.pexels.com/photos/3738086/pexels-photo-3738086.jpeg?auto=compress&cs=tinysrgb&w=800"
+                 alt="Puffer jacket" />
+            <div class="product-body">
+              <div class="product-brand">Urban Layer</div>
+              <div class="product-desc">Puffer jacket with hood</div>
+              <div class="product-price">₹2,899 <span>₹3,999</span></div>
+            </div>
+          </article>
+          <article class="product-card">
+            <img class="product-img" src="https://images.pexels.com/photos/7671165/pexels-photo-7671165.jpeg?auto=compress&cs=tinysrgb&w=800"
+                 alt="Printed cardigan" />
+            <div class="product-body">
+              <div class="product-brand">Boutique Local</div>
+              <div class="product-desc">Printed hand-knit cardigan</div>
+              <div class="product-price">₹1,999 <span>₹2,499</span></div>
+            </div>
+          </article>
+          <article class="product-card">
+            <img class="product-img" src="https://images.pexels.com/photos/7671140/pexels-photo-7671140.jpeg?auto=compress&cs=tinysrgb&w=800"
+                 alt="Resale denim" />
+            <div class="product-body">
+              <div class="product-brand">Resale Find</div>
+              <div class="product-desc">Vintage high-rise denim</div>
+              <div class="product-price">₹999 <span>₹1,899</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </section>
+
+    <!-- LOGIN PAGE -->
+    <section id="login" class="section app-page">
+      <div class="section-header">
+        <div>
+          <div class="section-eyebrow">Access</div>
+          <h2 class="section-title">Login for customers, boutiques & riders.</h2>
+        </div>
+        <p class="section-desc">
+          One entry point, three clear roles. The UI always shows which type of user is logging in so there’s no confusion.
+        </p>
+      </div>
+
+      <div class="login-grid">
+        <div class="login-card">
+          <div class="login-title">Sign in to FitFlow</div>
+          <p class="login-subtitle">
+            Choose who you are logging in as – customer, boutique owner, or rider.
+          </p>
+
+          <div class="role-toggle" id="roleToggle">
+            <button class="role-pill active" data-role="customer">Customer</button>
+            <button class="role-pill" data-role="boutique">Boutique Owner</button>
+            <button class="role-pill" data-role="rider">Rider</button>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="loginEmail">Email / Phone</label>
+            <input id="loginEmail" class="form-input" type="text" placeholder="you@example.com" />
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="loginPassword">Password</label>
+            <input id="loginPassword" class="form-input" type="password" placeholder="••••••••" />
+          </div>
+
+          <div class="login-meta-row">
+            <span>Forgot password?</span>
+            <a>Need an account?</a>
+          </div>
+
+          <button class="login-btn" id="loginButton">
+            Login
+          </button>
+
+          <div class="login-role-notice" id="loginRoleNotice">
+            <strong>You’re logging in as: Customer</strong>
+            <div class="role-extra-copy" id="roleExtraCopy">
+              You’ll see: personalized outfits, Fit Score, nearby boutiques and resale items.
+            </div>
+          </div>
+        </div>
+
+        <div class="login-side">
+          <p>
+            Each role has a tailored dashboard so everyone knows what they’re looking at immediately:
+          </p>
+          <ul class="login-side-list">
+            <li>
+              <span class="login-side-dot"></span>
+              <div>
+                <strong>Customer</strong><br />
+                Browse fits, style recommendations, local boutiques, and resale marketplace.
+              </div>
+            </li>
+            <li>
+              <span class="login-side-dot"></span>
+              <div>
+                <strong>Boutique Owner</strong><br />
+                Manage your store profile, upload inventory, see fit insights, and track orders from local customers.
+              </div>
+            </li>
+            <li>
+              <span class="login-side-dot"></span>
+              <div>
+                <strong>Rider</strong><br />
+                View assigned deliveries, pickup locations, and optimized routes for boutique-to-customer orders.
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- AFTER LOGIN FLOW PAGE -->
+    <section id="roleFlow" class="section flow-section app-page">
+      <div class="flow-header">
+        <div class="flow-role-badge">
+          <span>Logged in as</span>
+          <span id="flowRoleLabel">Customer</span>
+        </div>
+        <h2 class="section-title" id="flowTitle">Welcome to your FitFlow experience.</h2>
+        <p class="flow-subtitle" id="flowSubtitle">
+          Follow these steps to understand what you can do inside the app. Move through the pages one by one.
+        </p>
+      </div>
+
+      <div class="flow-steps">
+        <div class="flow-step-card">
+          <div class="flow-step-label" id="flowStepLabel">Step 1 of 4</div>
+          <div class="flow-step-title" id="flowStepTitle">Overview</div>
+          <div class="flow-step-body" id="flowStepBody">
+            As a customer, you can explore outfits, get personalized recommendations and shop from nearby boutiques.
+          </div>
+          <div class="flow-progress">
+            <div class="flow-dot active" data-step-dot="0"></div>
+            <div class="flow-dot" data-step-dot="1"></div>
+            <div class="flow-dot" data-step-dot="2"></div>
+            <div class="flow-dot" data-step-dot="3"></div>
+          </div>
+        </div>
+
+        <aside class="flow-side-card">
+          <div class="flow-side-title" id="flowSideTitle">
+            What this page shows
+          </div>
+          <ul class="flow-side-list" id="flowSideList">
+            <li>Your role and what you can do.</li>
+            <li>Key actions you’ll take every day.</li>
+            <li>Which app screens matter most for you.</li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="flow-nav">
+        <button id="prevStepBtn">← Back</button>
+        <button id="nextStepBtn" class="primary">Next step →</button>
+      </div>
+    </section>
+
+    <!-- SCREENS PAGE -->
+    <section id="screens" class="section app-page">
+      <div class="section-header">
+        <div>
+          <div class="section-eyebrow">Product screens</div>
+          <h2 class="section-title">End-to-end fashion journey, in 7 screens.</h2>
+        </div>
+        <p class="section-desc">
+          Click any title or card below to highlight that screen and view its UX statement. Ideal for design reviews and storytelling.
+        </p>
+      </div>
+
+      <div class="screen-titles-wrapper">
+        <div class="screen-titles-label">All screens</div>
+        <div class="screen-titles" id="screenTitles">
+          <button
+            class="screen-title active"
+            data-screen-title="onboarding"
+            data-long-title="Onboarding & Value Story"
+            data-description="Welcomes users with a warm sequence explaining: Find Your Perfect Fit, Discover Your Style, Support Local Boutiques, and Resell What You Don’t Use – ending with a clear, single CTA."
+          >
+            <span>01</span>Onboarding
+          </button>
+          <button
+            class="screen-title"
+            data-screen-title="profile"
+            data-long-title="Body & Style Profile"
+            data-description="Collects measurement sliders and preferred aesthetics (streetwear, ethnic, chic, basic, bold, minimal), generating smart AI tags that power Fit Score and style matching."
+          >
+            <span>02</span>Body & Style
+          </button>
+          <button
+            class="screen-title"
+            data-screen-title="home"
+            data-long-title="Home – Personalized Feed"
+            data-description="The main hub showing Best Fit Picks, Trending pieces, Local Boutiques, and Resale Picks – fully driven by the user’s profile and browsing behaviour."
+          >
+            <span>03</span>Home
+          </button>
+          <button
+            class="screen-title"
+            data-screen-title="boutiques"
+            data-long-title="Boutique Discovery"
+            data-description="A grid of boutique cards with name, rating, style category, and distance – designed to give small, independent boutiques premium visibility in the app."
+          >
+            <span>04</span>Boutiques
+          </button>
+          <button
+            class="screen-title"
+            data-screen-title="resale"
+            data-long-title="Resale Marketplace"
+            data-description="Upload-an-item flow with photos, condition, price, and tags, and large card-based listings to make secondhand feel as polished as first-hand retail."
+          >
+            <span>05</span>Resale
+          </button>
+          <button
+            class="screen-title"
+            data-screen-title="product"
+            data-long-title="Product & Fit Intelligence"
+            data-description="Product page with Fit Score, size prediction, style match %, and boutique context, built to reduce uncertainty and returns while keeping the UI minimal."
+          >
+            <span>06</span>Product
+          </button>
+          <button
+            class="screen-title"
+            data-screen-title="closet"
+            data-long-title="Profile & Closet Dashboard"
+            data-description="A dashboard for saved outfits, owned items, resale listings, and fit & style insights that help the user understand their actual wardrobe and next best buy."
+          >
+            <span>07</span>Profile & Closet
+          </button>
+        </div>
+        <div class="screen-title-statement">
+          <h3 id="screenTitleHeading">Onboarding & Value Story</h3>
+          <p id="screenTitleBody">
+            Welcomes users with a warm sequence explaining: Find Your Perfect Fit, Discover Your Style, Support Local Boutiques, and Resell What You Don’t Use – ending with a clear, single CTA.
+          </p>
+        </div>
+      </div>
+
+      <div class="screens-grid">
+        <article class="screen-card active" data-screen-card="onboarding">
+          <div>
+            <div class="screen-label">Screen 01</div>
+            <div class="screen-name">Onboarding & Value Story</div>
+            <p class="screen-meta">
+              Explains the core promises – fit, style, boutiques, and resale – using simple illustrations and a single “Get Started” button.
+            </p>
+          </div>
+          <div class="mini-phone">
+            <div class="mini-phone-inner">
+              <div class="mini-row">
+                <span class="mini-pill">Find Your Fit</span>
+                <span class="mini-tag">1 / 4</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="screen-card" data-screen-card="profile">
+          <div>
+            <div class="screen-label">Screen 02</div>
+            <div class="screen-name">Body & Style Profile</div>
+            <p class="screen-meta">
+              Sliders for measurements, aesthetic chips, and smart AI tags that create a structured body & style profile to drive recommendations.
+            </p>
+          </div>
+          <div class="mini-phone">
+            <div class="mini-phone-inner">
+              <div class="mini-row" style="justify-content:space-between;">
+                <span class="mini-pill">Body & Style</span>
+                <span class="mini-tag">Step 1 of 3</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="screen-card" data-screen-card="home">
+          <div>
+            <div class="screen-label">Screen 03</div>
+            <div class="screen-name">Home – Personalized Feed</div>
+            <p class="screen-meta">
+              Home feed with Best Fit Picks, Trending items, Local Boutiques, and Resale Picks surfaced in a minimal, scrollable layout.
+            </p>
+          </div>
+          <div class="mini-phone">
+            <div class="mini-phone-inner">
+              <div class="mini-row" style="justify-content:space-between;">
+                <span class="mini-pill">Home</span>
+                <span class="mini-tag">For you</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="screen-card" data-screen-card="boutiques">
+          <div>
+            <div class="screen-label">Screen 04</div>
+            <div class="screen-name">Boutique Discovery</div>
+            <p class="screen-meta">
+              Card grid for nearby boutiques with name, style, rating, and distance to celebrate local, independent stores.
+            </p>
+          </div>
+          <div class="mini-phone">
+            <div class="mini-phone-inner">
+              <div class="mini-row" style="justify-content:space-between;">
+                <span class="mini-pill">Nearby Boutiques</span>
+                <span class="mini-tag">Support local</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="screen-card" data-screen-card="resale">
+          <div>
+            <div class="screen-label">Screen 05</div>
+            <div class="screen-name">Resale Marketplace</div>
+            <p class="screen-meta">
+              A simple upload flow and large listings, making it easy to resell unused items while keeping a premium, fashion-first look.
+            </p>
+          </div>
+          <div class="mini-phone">
+            <div class="mini-phone-inner">
+              <div class="mini-row" style="justify-content:space-between;">
+                <span class="mini-pill">Resale</span>
+                <span class="mini-tag">Circular</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="screen-card" data-screen-card="product">
+          <div>
+            <div class="screen-label">Screen 06</div>
+            <div class="screen-name">Product & Fit Intelligence</div>
+            <p class="screen-meta">
+              Product view highlighting Fit Score, size prediction, style match, and boutique info – designed for confident purchasing.
+            </p>
+          </div>
+          <div class="mini-phone">
+            <div class="mini-phone-inner">
+              <div class="mini-row" style="justify-content:space-between;">
+                <span class="mini-pill">Fit Score</span>
+                <span class="mini-tag">92%</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="screen-card" data-screen-card="closet">
+          <div>
+            <div class="screen-label">Screen 07</div>
+            <div class="screen-name">Profile & Closet</div>
+            <p class="screen-meta">
+              Closet dashboard for saved outfits, owned items, and resale listings, plus high-level fit & style insights.
+            </p>
+          </div>
+          <div class="mini-phone">
+            <div class="mini-phone-inner">
+              <div class="mini-row" style="justify-content:space-between;">
+                <span class="mini-pill">Closet</span>
+                <span class="mini-tag">Insights</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>FitFlow × Myntra-style UI – concept demo.</span>
+      <div class="footer-links">
+        <span>Fit aware</span>
+        <span>Style led</span>
+        <span>Circular fashion</span>
+      </div>
+    </footer>
+  </main>
+
+  <!-- STYLE PANEL: Color + Font controls -->
+  <div class="style-panel">
+    <h4>Color theme</h4>
+    <div class="palette">
+      <button style="background:#ff3f6c" onclick="setTheme('warm')" title="Warm pink"></button>
+      <button style="background:#111827" onclick="setTheme('dark')" title="Dark"></button>
+      <button style="background:#2563eb" onclick="setTheme('blue')" title="Blue"></button>
+      <button style="background:#16a34a" onclick="setTheme('green')" title="Green"></button>
+    </div>
+    <div class="palette">
+      <button style="background:#7c3aed" onclick="setTheme('purple')" title="Violet"></button>
+      <button style="background:#ec4899" onclick="setTheme('rose')" title="Rose"></button>
+      <button style="background:#64748b" onclick="setTheme('neutral')" title="Neutral"></button>
+      <button style="background:#fb923c" onclick="setTheme('peach')" title="Peach"></button>
+    </div>
+
+    <h4>Font style</h4>
+    <div class="font-palette">
+      <button onclick="setFont('inter')">Inter / System</button>
+      <button onclick="setFont('poppins')">Poppins (rounded)</button>
+      <button onclick="setFont('nunito')">Nunito (soft)</button>
+      <button onclick="setFont('dmSans')">DM Sans</button>
+      <button onclick="setFont('spaceGrotesk')">Space Grotesk</button>
+      <button onclick="setFont('playfair')">Playfair (serif)</button>
+      <button onclick="setFont('mono')">Mono (dev)</button>
+    </div>
+    <small>Play with colors & fonts live.</small>
+  </div>
+
+  <script>
+    /* PAGE SWITCHING */
+    const pageSelect = document.getElementById('pageSelect');
+    const pages = {
+      home: document.getElementById('home'),
+      login: document.getElementById('login'),
+      after: document.getElementById('roleFlow'),
+      screens: document.getElementById('screens')
+    };
+
+    function showPage(key) {
+      Object.entries(pages).forEach(([k, el]) => {
+        if (!el) return;
+        el.classList.toggle('active', k === key);
+      });
+      if (pageSelect && pageSelect.value !== key) {
+        pageSelect.value = key;
+      }
+    }
+
+    showPage('home');
+
+    if (pageSelect) {
+      pageSelect.addEventListener('change', (e) => {
+        showPage(e.target.value);
+      });
+    }
+
+    const loginCtaBtn = document.getElementById('loginCtaBtn');
+    if (loginCtaBtn) {
+      loginCtaBtn.addEventListener('click', () => showPage('login'));
+    }
+
+    const goToScreensBtn = document.getElementById('goToScreensBtn');
+    const goToLoginFromHero = document.getElementById('goToLoginFromHero');
+
+    if (goToScreensBtn) {
+      goToScreensBtn.addEventListener('click', () => showPage('screens'));
+    }
+    if (goToLoginFromHero) {
+      goToLoginFromHero.addEventListener('click', () => showPage('login'));
+    }
+
+    /* LOGIN ROLE LOGIC */
+    const rolePills = document.querySelectorAll('.role-pill');
+    const loginRoleNotice = document.getElementById('loginRoleNotice');
+    const roleExtraCopy = document.getElementById('roleExtraCopy');
+    const loginButton = document.getElementById('loginButton');
+
+    const roleDescriptions = {
+      customer: "You’ll see: personalized outfits, Fit Score, nearby boutiques and resale items.",
+      boutique: "You’ll see: boutique dashboard, product uploads, orders from customers and fit insights.",
+      rider: "You’ll see: assigned deliveries, pickup locations and delivery routes between boutiques and customers."
+    };
+
+    let currentRole = 'customer';
+
+    rolePills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        currentRole = pill.dataset.role;
+        rolePills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+
+        let roleLabel = 'Customer';
+        if (currentRole === 'boutique') roleLabel = 'Boutique Owner';
+        if (currentRole === 'rider') roleLabel = 'Rider';
+
+        loginRoleNotice.querySelector('strong').textContent =
+          `You’re logging in as: ${roleLabel}`;
+        roleExtraCopy.textContent = roleDescriptions[currentRole];
+      });
+    });
+
+    /* AFTER LOGIN FLOW */
+    const flowRoleLabel = document.getElementById('flowRoleLabel');
+    const flowTitle = document.getElementById('flowTitle');
+    const flowSubtitle = document.getElementById('flowSubtitle');
+    const flowStepLabel = document.getElementById('flowStepLabel');
+    const flowStepTitle = document.getElementById('flowStepTitle');
+    const flowStepBody = document.getElementById('flowStepBody');
+    const flowSideTitle = document.getElementById('flowSideTitle');
+    const flowSideList = document.getElementById('flowSideList');
+    const stepDots = document.querySelectorAll('[data-step-dot]');
+    const prevStepBtn = document.getElementById('prevStepBtn');
+    const nextStepBtn = document.getElementById('nextStepBtn');
+
+    const roleFlows = {
+      customer: [
+        {
+          title: "Overview",
+          body: "As a customer, FitFlow helps you find clothes that match your body and vibe. You get smart Fit Scores, style matches, and a Myntra-style shopping flow.",
+          sideTitle: "Your customer dashboard",
+          sideItems: [
+            "Personalized home feed with Best Fit Picks.",
+            "Quick filters for style, size and local boutiques.",
+            "Resale section to buy and sell pre-loved pieces."
+          ]
+        },
+        {
+          title: "What you can do",
+          body: "Browse personalized outfits, check Fit Score before buying, see how items will sit on your body and save outfits for later.",
+          sideTitle: "Daily actions",
+          sideItems: [
+            "Scroll your home feed for new outfits.",
+            "Tap any product to see Fit Score & style match.",
+            "Save looks to your Closet dashboard."
+          ]
+        },
+        {
+          title: "Screens you’ll use",
+          body: "You’ll mostly move between the Home screen, Product & Fit Intelligence, Resale Marketplace and your Profile & Closet dashboard.",
+          sideTitle: "Key screens",
+          sideItems: [
+            "Home – personalized feed of outfits.",
+            "Product page with Fit Score & size recommendation.",
+            "Resale marketplace to buy/sell items.",
+            "Profile & Closet for saved and owned items."
+          ]
+        },
+        {
+          title: "Next steps",
+          body: "After login, you’d land on the Home screen with your Best Fit Picks. From there, you can explore boutiques, product pages and resale in a single flow.",
+          sideTitle: "Final call to action",
+          sideItems: [
+            "Start on Home and explore your fits.",
+            "Visit local boutiques to support nearby stores.",
+            "Use the resale tab to keep your closet circular."
+          ]
+        }
+      ],
+      boutique: [
+        {
+          title: "Overview",
+          body: "As a boutique owner, FitFlow gives your store a premium storefront inside a Myntra-style marketplace. Customers discover you based on style, fit, and distance.",
+          sideTitle: "Your boutique dashboard",
+          sideItems: [
+            "Manage your boutique profile and photos.",
+            "Upload products with sizes, styles and prices.",
+            "See which fits perform best for your audience."
+          ]
+        },
+        {
+          title: "What you can do",
+          body: "Add new inventory, highlight bestsellers, track orders and understand what styles and sizes your customers actually buy and keep.",
+          sideTitle: "Daily actions",
+          sideItems: [
+            "Upload or edit items quickly.",
+            "Review incoming orders from local shoppers.",
+            "Check fit insights to guide future buying."
+          ]
+        },
+        {
+          title: "Screens you’ll use",
+          body: "You’ll mainly use the Boutique Discovery listing, product management pages and analytics around fit and orders.",
+          sideTitle: "Key screens",
+          sideItems: [
+            "Boutique Discovery – how shoppers see you.",
+            "Product page – your inventory details.",
+            "Insights view – fit & order analytics."
+          ]
+        },
+        {
+          title: "Next steps",
+          body: "After login, you’d land on your boutique dashboard, ready to upload items or respond to customer demand in real-time.",
+          sideTitle: "Final call to action",
+          sideItems: [
+            "Complete your boutique profile.",
+            "Upload a small, curated set of items first.",
+            "Use insights to refine your collection."
+          ]
+        }
+      ],
+      rider: [
+        {
+          title: "Overview",
+          body: "As a rider, FitFlow keeps your work clear and simple: see assigned deliveries, pickup locations, and where to drop each order.",
+          sideTitle: "Your rider view",
+          sideItems: [
+            "List of active deliveries for today.",
+            "Pickup addresses from boutiques.",
+            "Drop-off addresses for customers."
+          ]
+        },
+        {
+          title: "What you can do",
+          body: "Accept deliveries, mark pickups as collected, and update the status when orders are delivered to customers.",
+          sideTitle: "Daily actions",
+          sideItems: [
+            "Check today’s delivery queue.",
+            "Follow the suggested route.",
+            "Mark each stop as picked up or delivered."
+          ]
+        },
+        {
+          title: "Screens you’ll use",
+          body: "You’ll mostly stay on a streamlined deliveries screen, with quick access to order details and navigation.",
+          sideTitle: "Key screens",
+          sideItems: [
+            "Deliveries list with status.",
+            "Order details with items and notes.",
+            "Map / route overview (if enabled)."
+          ]
+        },
+        {
+          title: "Next steps",
+          body: "After login, you’d land straight on your deliveries list, sorted by time and distance, so you can start working immediately.",
+          sideTitle: "Final call to action",
+          sideItems: [
+            "Review today’s route.",
+            "Start with nearby pickups.",
+            "Keep statuses updated for boutiques and customers."
+          ]
+        }
+      ]
+    };
+
+    let currentStep = 0;
+
+    function renderFlow(role, stepIndex) {
+      const steps = roleFlows[role];
+      const step = steps[stepIndex];
+
+      let roleLabel = 'Customer';
+      if (role === 'boutique') roleLabel = 'Boutique Owner';
+      if (role === 'rider') roleLabel = 'Rider';
+      flowRoleLabel.textContent = roleLabel;
+
+      flowTitle.textContent = `Welcome, ${roleLabel}.`;
+      flowSubtitle.textContent =
+        "Go through each page one by one to understand how your side of the app works.";
+      flowStepLabel.textContent = `Step ${stepIndex + 1} of ${steps.length}`;
+      flowStepTitle.textContent = step.title;
+      flowStepBody.textContent = step.body;
+
+      flowSideTitle.textContent = step.sideTitle;
+      flowSideList.innerHTML = "";
+      step.sideItems.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        flowSideList.appendChild(li);
+      });
+
+      stepDots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === stepIndex);
+      });
+
+      prevStepBtn.disabled = stepIndex === 0;
+      nextStepBtn.textContent =
+        stepIndex === steps.length - 1 ? "Finish" : "Next step →";
+    }
+
+    loginButton.addEventListener('click', () => {
+      currentStep = 0;
+      renderFlow(currentRole, currentStep);
+      showPage('after');
+    });
+
+    prevStepBtn.addEventListener('click', () => {
+      if (currentStep === 0) return;
+      currentStep -= 1;
+      renderFlow(currentRole, currentStep);
+    });
+
+    nextStepBtn.addEventListener('click', () => {
+      const steps = roleFlows[currentRole];
+      if (currentStep < steps.length - 1) {
+        currentStep += 1;
+        renderFlow(currentRole, currentStep);
+      } else {
+        showPage('screens');
+      }
+    });
+
+    /* SCREENS INTERACTION */
+    const screenCards = document.querySelectorAll('[data-screen-card]');
+    const screenTitleButtons = document.querySelectorAll('[data-screen-title]');
+    const statementHeading = document.getElementById('screenTitleHeading');
+    const statementBody = document.getElementById('screenTitleBody');
+
+    function setActiveScreen(id) {
+      screenCards.forEach(card => {
+        card.classList.toggle('active', card.dataset.screenCard === id);
+      });
+      screenTitleButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.screenTitle === id);
+      });
+      const activeTitle = Array.from(screenTitleButtons).find(
+        btn => btn.dataset.screenTitle === id
+      );
+      if (activeTitle && statementHeading && statementBody) {
+        const longTitle =
+          activeTitle.dataset.longTitle || activeTitle.innerText.trim();
+        const desc = activeTitle.dataset.description || '';
+        statementHeading.textContent = longTitle;
+        statementBody.textContent = desc;
+      }
+    }
+
+    screenCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.screenCard;
+        setActiveScreen(id);
+      });
+    });
+
+    screenTitleButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.screenTitle;
+        setActiveScreen(id);
+      });
+    });
+
+    /* THEME & FONT CONTROLS */
+    function setTheme(theme) {
+      const root = document.documentElement;
+
+      if (theme === 'warm') {
+        root.style.setProperty('--accent', '#ff3f6c');
+        root.style.setProperty('--accent-strong', '#ff1659');
+        root.style.setProperty('--bg', '#f5f5f7');
+        root.style.setProperty('--bg-alt', '#ffffff');
+      }
+      if (theme === 'dark') {
+        root.style.setProperty('--accent', '#f97316');
+        root.style.setProperty('--accent-strong', '#ea580c');
+        root.style.setProperty('--bg', '#020617');
+        root.style.setProperty('--bg-alt', '#0f172a');
+      }
+      if (theme === 'blue') {
+        root.style.setProperty('--accent', '#2563eb');
+        root.style.setProperty('--accent-strong', '#1d4ed8');
+        root.style.setProperty('--bg', '#eff6ff');
+        root.style.setProperty('--bg-alt', '#ffffff');
+      }
+      if (theme === 'green') {
+        root.style.setProperty('--accent', '#16a34a');
+        root.style.setProperty('--accent-strong', '#15803d');
+        root.style.setProperty('--bg', '#ecfdf5');
+        root.style.setProperty('--bg-alt', '#ffffff');
+      }
+      if (theme === 'purple') {
+        root.style.setProperty('--accent', '#7c3aed');
+        root.style.setProperty('--accent-strong', '#6d28d9');
+        root.style.setProperty('--bg', '#f5f3ff');
+        root.style.setProperty('--bg-alt', '#ffffff');
+      }
+      if (theme === 'rose') {
+        root.style.setProperty('--accent', '#ec4899');
+        root.style.setProperty('--accent-strong', '#db2777');
+        root.style.setProperty('--bg', '#fff1f2');
+        root.style.setProperty('--bg-alt', '#ffffff');
+      }
+      if (theme === 'neutral') {
+        root.style.setProperty('--accent', '#64748b');
+        root.style.setProperty('--accent-strong', '#475569');
+        root.style.setProperty('--bg', '#f8fafc');
+        root.style.setProperty('--bg-alt', '#ffffff');
+      }
+      if (theme === 'peach') {
+        root.style.setProperty('--accent', '#fb923c');
+        root.style.setProperty('--accent-strong', '#f97316');
+        root.style.setProperty('--bg', '#fff7ed');
+        root.style.setProperty('--bg-alt', '#ffffff');
+      }
+    }
+
+    function setFont(font) {
+      const root = document.documentElement;
+
+      if (font === 'inter') {
+        root.style.setProperty(
+          '--font-main',
+          "system-ui, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif"
+        );
+      }
+      if (font === 'poppins') {
+        root.style.setProperty(
+          '--font-main',
+          "'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
+        );
+      }
+      if (font === 'nunito') {
+        root.style.setProperty(
+          '--font-main',
+          "'Nunito', system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
+        );
+      }
+      if (font === 'dmSans') {
+        root.style.setProperty(
+          '--font-main',
+          "'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
+        );
+      }
+      if (font === 'spaceGrotesk') {
+        root.style.setProperty(
+          '--font-main',
+          "'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
+        );
+      }
+      if (font === 'playfair') {
+        root.style.setProperty(
+          '--font-main',
+          "'Playfair Display', system-ui, serif"
+        );
+      }
+      if (font === 'mono') {
+        root.style.setProperty(
+          '--font-main',
+          "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+        );
+      }
+    }
+  </script>
+</body>
+</html>
